@@ -1,0 +1,78 @@
+buildscript {
+    repositories {
+        jcenter()
+
+        maven {
+            name = 'forge'
+            url = 'http://files.minecraftforge.net/maven'
+        }
+
+        maven {
+            name = 'SpongePowered'
+            url = 'http://repo.spongepowered.org/maven'
+        }
+    }
+
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT'
+        classpath 'org.spongepowered:mixingradle:0.6-SNAPSHOT'
+    }
+}
+
+group 'com.github.dskprt'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'net.minecraftforge.gradle.tweaker-client'
+apply plugin: 'org.spongepowered.mixin'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+minecraft {
+    version = '1.8.9'
+    mappings = 'stable_20'
+    tweakClass = 'com.github.dskprt.remotemc.launch.MixinTweaker'
+    runDir = 'run'
+    makeObfSourceJar = true
+}
+
+repositories {
+    mavenCentral()
+
+    maven {
+        name = 'spongepowered-repo'
+        url = 'http://repo.spongepowered.org/maven/'
+    }
+}
+
+dependencies {
+    compile('org.spongepowered:mixin:0.7.11-SNAPSHOT') {
+        exclude module: 'launchwrapper'
+        exclude module: 'guava'
+        exclude module: 'gson'
+        exclude module: 'commons-io'
+        //exclude module: 'log4j-core'
+    }
+}
+
+compileJava {
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    options.encoding = 'UTF-8'
+}
+
+mixin {
+    defaultObfuscationEnv searge
+    add sourceSets.main, 'mixins.remotemc.refmap.json'
+}
+
+jar {
+    manifest.attributes(
+            "MixinConfigs": 'mixin.remotemc.json',
+            "TweakClass": 'com.github.dskprt.remotemc.launch.MixinTweaker',
+            "TweakOrder": 0,
+            "Manifest-Version": 1.0
+    )
+}

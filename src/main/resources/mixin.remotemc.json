@@ -1,0 +1,10 @@
+{
+  "required": true,
+  "package": "com.github.dskprt.remotemc.mixins",
+  "refmap": "mixins.remotemc.refmap.json",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "MixinMinecraft",
+    "MixinGuiScreen"
+  ]
+}
